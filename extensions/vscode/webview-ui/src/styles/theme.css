@@ -1,0 +1,199 @@
+/* Code Agents — Design System: Theme Tokens
+   Aesthetic: "Terminal Noir" — monochrome depth with surgical accent hits.
+   Inspired by: Bloomberg Terminal meets Figma's restraint.
+   Font: JetBrains Mono for everything — this is a developer tool, own it.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+/* ---- Spacing Scale (4px baseline) ---- */
+:root {
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+}
+
+/* ---- Auto theme — inherits IDE tokens, falls back to dark ---- */
+:root,
+:root[data-theme="auto"] {
+  --ca-bg-primary: var(--vscode-editor-background, #0c0c0f);
+  --ca-bg-secondary: var(--vscode-sideBar-background, #111116);
+  --ca-bg-tertiary: var(--vscode-input-background, #08080b);
+  --ca-bg-surface: var(--vscode-editorWidget-background, #1a1a22);
+  --ca-bg-hover: var(--vscode-list-hoverBackground, #1f1f2a);
+  --ca-bg-active: var(--vscode-list-activeSelectionBackground, #2a2a38);
+  --ca-bg-user: #0d1b2a;
+  --ca-bg-assistant: #12121a;
+  --ca-bg-code: #08080c;
+
+  --ca-text-primary: var(--vscode-editor-foreground, #e8e8ed);
+  --ca-text-secondary: var(--vscode-descriptionForeground, #9494ab);
+  --ca-text-muted: var(--vscode-disabledForeground, #7a7a94);
+  --ca-text-inverse: #0c0c0f;
+
+  --ca-accent: var(--vscode-focusBorder, #6366f1);
+  --ca-accent-hover: #818cf8;
+  --ca-accent-muted: rgba(99, 102, 241, 0.12);
+  --ca-accent-subtle: rgba(99, 102, 241, 0.06);
+
+  --ca-border: var(--vscode-panel-border, #1e1e2a);
+  --ca-border-subtle: rgba(255, 255, 255, 0.04);
+  --ca-border-focus: var(--vscode-focusBorder, #6366f1);
+
+  --ca-success: #34d399;
+  --ca-success-muted: rgba(52, 211, 153, 0.12);
+  --ca-warning: #fbbf24;
+  --ca-warning-muted: rgba(251, 191, 36, 0.12);
+  --ca-error: #f87171;
+  --ca-error-muted: rgba(248, 113, 113, 0.12);
+  --ca-info: #60a5fa;
+  --ca-info-muted: rgba(96, 165, 250, 0.12);
+
+  --ca-radius: 6px;
+  --ca-radius-sm: 4px;
+  --ca-radius-lg: 10px;
+  --ca-radius-full: 9999px;
+
+  --ca-font: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ca-font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Consolas', monospace;
+  --ca-font-size: 13px;
+  --ca-font-size-sm: 12px;
+  --ca-font-size-xs: 11px;
+  --ca-font-size-lg: 15px;
+  --ca-line-height: 1.6;
+
+  --ca-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --ca-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --ca-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --ca-shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
+
+  --ca-transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --ca-transition-slow: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --ca-transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---- Dark theme (deep space) ---- */
+:root[data-theme="dark"] {
+  --ca-bg-primary: #0c0c0f;
+  --ca-bg-secondary: #111116;
+  --ca-bg-tertiary: #08080b;
+  --ca-bg-surface: #1a1a22;
+  --ca-bg-hover: #1f1f2a;
+  --ca-bg-active: #2a2a38;
+  --ca-bg-user: #0d1b2a;
+  --ca-bg-assistant: #12121a;
+  --ca-bg-code: #08080c;
+
+  --ca-text-primary: #e8e8ed;
+  --ca-text-secondary: #9494ab;
+  --ca-text-muted: #7a7a94;
+  --ca-text-inverse: #0c0c0f;
+
+  --ca-accent: #6366f1;
+  --ca-accent-hover: #818cf8;
+  --ca-accent-muted: rgba(99, 102, 241, 0.12);
+
+  --ca-border: #1e1e2a;
+  --ca-border-subtle: rgba(255, 255, 255, 0.04);
+  --ca-border-focus: #6366f1;
+}
+
+/* ---- Light theme (editorial white) ---- */
+:root[data-theme="light"] {
+  --ca-bg-primary: #fafafa;
+  --ca-bg-secondary: #f0f0f3;
+  --ca-bg-tertiary: #e8e8ec;
+  --ca-bg-surface: #ffffff;
+  --ca-bg-hover: #ececf0;
+  --ca-bg-active: #dddde4;
+  --ca-bg-user: #e8eef6;
+  --ca-bg-assistant: #f5f5f8;
+  --ca-bg-code: #f0f0f4;
+
+  --ca-text-primary: #18181b;
+  --ca-text-secondary: #52525b;
+  --ca-text-muted: #71717a;
+  --ca-text-inverse: #fafafa;
+
+  --ca-accent: #4f46e5;
+  --ca-accent-hover: #4338ca;
+  --ca-accent-muted: rgba(79, 70, 229, 0.08);
+  --ca-accent-subtle: rgba(79, 70, 229, 0.04);
+
+  --ca-border: #e4e4e7;
+  --ca-border-subtle: rgba(0, 0, 0, 0.04);
+  --ca-border-focus: #4f46e5;
+
+  --ca-success: #16a34a;
+  --ca-success-muted: rgba(22, 163, 74, 0.1);
+  --ca-warning: #ca8a04;
+  --ca-warning-muted: rgba(202, 138, 4, 0.1);
+  --ca-error: #dc2626;
+  --ca-error-muted: rgba(220, 38, 38, 0.1);
+  --ca-info: #2563eb;
+  --ca-info-muted: rgba(37, 99, 235, 0.1);
+
+  --ca-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --ca-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --ca-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --ca-shadow-glow: 0 0 20px rgba(79, 70, 229, 0.08);
+}
+
+/* ---- High Contrast (WCAG AAA) ---- */
+:root[data-theme="high-contrast"] {
+  --ca-bg-primary: #000000;
+  --ca-bg-secondary: #0a0a0a;
+  --ca-bg-tertiary: #000000;
+  --ca-bg-surface: #1a1a1a;
+  --ca-bg-hover: #2a2a2a;
+  --ca-bg-active: #3a3a3a;
+  --ca-bg-user: #002244;
+  --ca-bg-assistant: #1a1a28;
+  --ca-bg-code: #000000;
+
+  --ca-text-primary: #ffffff;
+  --ca-text-secondary: #e0e0e0;
+  --ca-text-muted: #c0c0c0;
+  --ca-text-inverse: #000000;
+
+  --ca-accent: #79b8ff;
+  --ca-accent-hover: #a0cfff;
+  --ca-accent-muted: rgba(121, 184, 255, 0.2);
+  --ca-accent-subtle: rgba(121, 184, 255, 0.08);
+
+  --ca-border: #606060;
+  --ca-border-subtle: rgba(255, 255, 255, 0.15);
+  --ca-border-focus: #79b8ff;
+
+  --ca-success: #56d364;
+  --ca-success-muted: rgba(86, 211, 100, 0.2);
+  --ca-warning: #e3b341;
+  --ca-warning-muted: rgba(227, 179, 65, 0.2);
+  --ca-error: #f85149;
+  --ca-error-muted: rgba(248, 81, 73, 0.2);
+  --ca-info: #79b8ff;
+  --ca-info-muted: rgba(121, 184, 255, 0.2);
+
+  --ca-shadow-glow: 0 0 20px rgba(121, 184, 255, 0.15);
+}
+
+/* ---- Agent Accent Colors ---- */
+[data-agent="auto-pilot"]     { --ca-agent-accent: #a78bfa; --ca-agent-bg: rgba(167, 139, 250, 0.06); }
+[data-agent="code-writer"]    { --ca-agent-accent: #34d399; --ca-agent-bg: rgba(52, 211, 153, 0.06); }
+[data-agent="code-reviewer"]  { --ca-agent-accent: #fb923c; --ca-agent-bg: rgba(251, 146, 60, 0.06); }
+[data-agent="code-reasoning"] { --ca-agent-accent: #60a5fa; --ca-agent-bg: rgba(96, 165, 250, 0.06); }
+[data-agent="code-tester"]    { --ca-agent-accent: #fbbf24; --ca-agent-bg: rgba(251, 191, 36, 0.06); }
+[data-agent="test-coverage"]  { --ca-agent-accent: #f472b6; --ca-agent-bg: rgba(244, 114, 182, 0.06); }
+[data-agent="qa-regression"]  { --ca-agent-accent: #fb7185; --ca-agent-bg: rgba(251, 113, 133, 0.06); }
+[data-agent="jenkins-cicd"]   { --ca-agent-accent: #6366f1; --ca-agent-bg: rgba(99, 102, 241, 0.06); }
+[data-agent="argocd-verify"]  { --ca-agent-accent: #a78bfa; --ca-agent-bg: rgba(167, 139, 250, 0.06); }
+[data-agent="git-ops"]        { --ca-agent-accent: #2dd4bf; --ca-agent-bg: rgba(45, 212, 191, 0.06); }
+[data-agent="jira-ops"]       { --ca-agent-accent: #38bdf8; --ca-agent-bg: rgba(56, 189, 248, 0.06); }
+[data-agent="redash-query"]   { --ca-agent-accent: #e879f9; --ca-agent-bg: rgba(232, 121, 249, 0.06); }
+[data-agent="security"]       { --ca-agent-accent: #f87171; --ca-agent-bg: rgba(248, 113, 113, 0.06); }

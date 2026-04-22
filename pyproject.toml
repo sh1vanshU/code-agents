@@ -1,0 +1,80 @@
+[tool.poetry]
+name = "code-agents"
+version = "0.7.0"
+description = "YAML-driven OpenAI-compatible API server for cursor-agent and claude-agent backends"
+authors = []
+license = "MIT"
+readme = "README.md"
+packages = [{include = "code_agents"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+fastapi = ">=0.100"
+uvicorn = {version = ">=0.20", extras = ["standard"]}
+pydantic = ">=2.0"
+pyyaml = ">=6.0"
+requests = ">=2.28"
+httpx = ">=0.24"
+elasticsearch = ">=8,<9"
+claude-agent-sdk = ">=0.1"
+prompt-toolkit = "^3.0.52"
+textual = "^8.2.3"
+questionary = "^2.1.1"
+opentelemetry-api = ">=1.20"
+opentelemetry-sdk = ">=1.20"
+opentelemetry-instrumentation-fastapi = ">=0.41b0"
+opentelemetry-instrumentation-httpx = ">=0.41b0"
+opentelemetry-exporter-otlp = ">=1.20"
+structlog = ">=23.1"
+
+[tool.poetry.group.cursor]
+optional = true
+
+[tool.poetry.group.cursor.dependencies]
+cursor-agent-sdk = {git = "https://github.com/gitcnd/cursor-agent-sdk-python.git", branch = "main"}
+
+[tool.poetry.extras]
+voice = ["SpeechRecognition", "PyAudio", "pyttsx3"]
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=7.0"
+pytest-asyncio = ">=0.21"
+mcp = "^1.26.0"
+graphifyy = "^0.4.11"
+
+[tool.poetry.scripts]
+code-agents = "code_agents.cli:main"
+code-agents-setup = "code_agents.setup:main"
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["code_agents"]
+omit = [
+    "tests/*",
+    "code_agents/webui/*",
+    "code_agents/setup/*",
+]
+parallel = true
+branch = false
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+precision = 1
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__",
+    "if TYPE_CHECKING",
+    "raise NotImplementedError",
+    "pass$",
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,28 @@
+# Cursor API over HTTP (no cursor-agent CLI, no desktop app)
+#
+# Uses CURSOR_API_KEY with an OpenAI-compatible endpoint. No cursor-agent or Cursor app required.
+#
+# To enable:
+#   1. Rename to cursor_http_example.yaml
+#   2. Set CURSOR_API_URL in .env to your OpenAI-compatible API base URL (e.g. from a proxy
+#      that accepts Cursor API key), or set extra_args.cursor_api_url below.
+#   3. Set CURSOR_API_KEY in .env
+#   4. Restart the server
+#
+# Note: Cursor does not currently publish a public chat completions API. Use this when you have
+# an OpenAI-compatible endpoint that accepts your Cursor API key (e.g. a third-party proxy or
+# future official Cursor endpoint).
+
+name: cursor-http
+display_name: "Cursor (API only)"
+backend: cursor_http
+model: "Composer 2 Fast"
+system_prompt: |
+  You are a helpful coding assistant. You analyze code, answer questions, and suggest improvements.
+permission_mode: default
+api_key: ${CURSOR_API_KEY}
+cwd: "."
+stream_tool_activity: true
+include_session: true
+extra_args:
+  cursor_api_url: ${CURSOR_API_URL}

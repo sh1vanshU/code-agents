@@ -1,0 +1,6 @@
+# Agent protocol quality gates — loaded by audit_orchestrator.load_gates()
+gates:
+  - name: "Debug code removed"
+    check: "_gate_no_debug_code"
+    severity: "warning"
+    description: "No breakpoint(), pdb, debugger, or console.log in production code"

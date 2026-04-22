@@ -1,0 +1,192 @@
+/* Code Agents — Plan Mode: Step tracker, progress, approval flow */
+
+.plan-tracker {
+  margin: var(--sp-2) 0;
+  padding: var(--sp-4);
+  background: var(--ca-bg-secondary);
+  border: 1px solid var(--ca-border);
+  border-left: 3px solid var(--ca-accent);
+  border-radius: var(--ca-radius);
+  animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.plan-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-3);
+  gap: var(--sp-2);
+}
+
+.plan-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ca-text-primary);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plan-status {
+  font-family: var(--ca-font-mono);
+  font-size: var(--ca-font-size-xs);
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--ca-radius-full);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.plan-status.draft { background: var(--ca-bg-surface); color: var(--ca-text-muted); }
+.plan-status.proposed { background: var(--ca-accent-muted); color: var(--ca-accent); }
+.plan-status.approved { background: var(--ca-success-muted); color: var(--ca-success); }
+.plan-status.executing {
+  background: var(--ca-warning-muted);
+  color: var(--ca-warning);
+  animation: progressPulse 2s ease-in-out infinite;
+}
+.plan-status.completed { background: var(--ca-success-muted); color: var(--ca-success); }
+.plan-status.rejected { background: var(--ca-error-muted); color: var(--ca-error); }
+
+/* ---- Progress bar ---- */
+.plan-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+
+.plan-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--ca-bg-tertiary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.plan-progress-fill {
+  height: 100%;
+  background: var(--ca-accent);
+  border-radius: 3px;
+  transition: width var(--ca-transition-slow);
+  position: relative;
+}
+.plan-progress-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15));
+  border-radius: 3px;
+}
+
+.plan-progress-text {
+  font-family: var(--ca-font-mono);
+  font-size: var(--ca-font-size-xs);
+  color: var(--ca-text-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+  text-align: right;
+}
+
+/* ---- Step list ---- */
+.plan-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.plan-step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  padding: var(--sp-2);
+  border-radius: var(--ca-radius-sm);
+  font-size: var(--ca-font-size-sm);
+  transition: background var(--ca-transition);
+  position: relative;
+}
+.plan-step.current {
+  background: var(--ca-accent-muted);
+}
+
+/* Vertical connector line */
+.plan-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 17px; /* center of 18px icon + 8px padding */
+  top: 26px;
+  bottom: -2px;
+  width: 1px;
+  background: var(--ca-border);
+}
+
+.plan-step-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  margin-top: 1px;
+  border-radius: 50%;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+
+.plan-step-icon.completed {
+  color: var(--ca-success);
+  background: var(--ca-success-muted);
+}
+.plan-step-icon.current {
+  color: var(--ca-accent);
+  background: var(--ca-accent-muted);
+  animation: pulse 2s ease-in-out infinite;
+}
+.plan-step-icon.pending {
+  color: var(--ca-text-muted);
+  background: var(--ca-bg-surface);
+}
+.plan-step-icon.failed {
+  color: var(--ca-error);
+  background: var(--ca-error-muted);
+}
+
+.plan-step-text {
+  flex: 1;
+  color: var(--ca-text-secondary);
+  line-height: 1.4;
+}
+.plan-step.current .plan-step-text {
+  color: var(--ca-text-primary);
+  font-weight: 500;
+}
+.plan-step.completed .plan-step-text {
+  color: var(--ca-text-muted);
+}
+
+.plan-step-indicator {
+  font-family: var(--ca-font-mono);
+  font-size: var(--ca-font-size-xs);
+  color: var(--ca-accent);
+  white-space: nowrap;
+  padding: 1px 6px;
+  background: var(--ca-accent-muted);
+  border-radius: var(--ca-radius-sm);
+}
+
+/* ---- Plan actions ---- */
+.plan-actions {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--ca-border-subtle);
+}

@@ -1,0 +1,11 @@
+# Logging quality gates — loaded by audit_orchestrator.load_gates()
+gates:
+  - name: "Log levels correct"
+    check: "_gate_log_levels"
+    severity: "warning"
+    description: "Detect misused log levels (e.g., logger.error for non-errors)"
+
+  - name: "No PII in logs"
+    check: "_gate_no_pii_logs"
+    severity: "critical"
+    description: "Prevent email, card numbers, SSN from appearing in log statements"

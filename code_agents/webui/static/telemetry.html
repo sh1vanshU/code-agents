@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Agents — Telemetry</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'SF Mono', 'Fira Code', monospace; background: #1a1b26; color: #c0caf5; padding: 2rem; }
+        h1 { color: #7aa2f7; font-size: 1.5rem; margin-bottom: 1.5rem; }
+        h2 { color: #bb9af7; font-size: 1.1rem; margin: 1.5rem 0 0.8rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .card { background: #24283b; border-radius: 8px; padding: 1.2rem; border: 1px solid #414868; }
+        .card .label { color: #565f89; font-size: 0.75rem; text-transform: uppercase; }
+        .card .value { color: #c0caf5; font-size: 1.8rem; font-weight: bold; margin: 0.3rem 0; }
+        .card .sub { color: #565f89; font-size: 0.8rem; }
+        table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; }
+        th { text-align: left; color: #565f89; font-size: 0.75rem; text-transform: uppercase; padding: 0.5rem; border-bottom: 1px solid #414868; }
+        td { padding: 0.5rem; border-bottom: 1px solid #292e42; color: #a9b1d6; font-size: 0.85rem; }
+        .bar { background: #7aa2f7; height: 8px; border-radius: 4px; display: inline-block; vertical-align: middle; }
+        .pill-error { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; background: #3a1a1a; color: #f7768e; }
+        .time-filter { margin-bottom: 1rem; }
+        .time-filter button { background: #24283b; border: 1px solid #414868; color: #c0caf5; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer; margin-right: 0.5rem; font-family: inherit; }
+        .time-filter button.active { background: #7aa2f7; color: #1a1b26; border-color: #7aa2f7; }
+        .time-filter button:hover { border-color: #7aa2f7; }
+        .empty { color: #565f89; font-style: italic; padding: 1rem; }
+        a { color: #7aa2f7; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .nav { margin-bottom: 1rem; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="nav"><a href="/ui">&larr; Chat</a><a href="/dashboard" style="margin-left:1rem">Team Dashboard</a></div>
+    <h1>⚡ Code Agents — Telemetry Dashboard</h1>
+
+    <div class="time-filter">
+        <button onclick="loadAll(1)" class="active" id="btn-1">Today</button>
+        <button onclick="loadAll(7)" id="btn-7">7 Days</button>
+        <button onclick="loadAll(30)" id="btn-30">30 Days</button>
+    </div>
+
+    <div class="grid" id="summary-cards"></div>
+
+    <h2>Agent Usage</h2>
+    <table id="agent-table"><thead><tr><th>Agent</th><th>Messages</th><th>Tokens</th><th>Usage</th></tr></thead><tbody></tbody></table>
+
+    <h2>Top Commands</h2>
+    <table id="cmd-table"><thead><tr><th>Command</th><th>Count</th><th>Avg Time</th></tr></thead><tbody></tbody></table>
+
+    <h2>Errors</h2>
+    <table id="error-table"><thead><tr><th>Agent</th><th>Count</th><th>Last Error</th></tr></thead><tbody></tbody></table>
+
+    <script>
+        const BASE = window.location.origin;
+        function fmt(n) { return n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed(1)+'K' : n.toString(); }
+        async function get(url) { try { const r = await fetch(url); return r.ok ? await r.json() : null; } catch { return null; } }
+
+        async function loadAll(days) {
+            document.querySelectorAll('.time-filter button').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-'+days).classList.add('active');
+
+            const s = await get(`${BASE}/telemetry/summary?days=${days}`);
+            const el = document.getElementById('summary-cards');
+            if (!s) { el.innerHTML = '<div class="empty">No data</div>'; return; }
+            const t = (s.tokens_in||0)+(s.tokens_out||0);
+            el.innerHTML = `
+                <div class="card"><div class="label">Sessions</div><div class="value">${s.sessions||0}</div></div>
+                <div class="card"><div class="label">Messages</div><div class="value">${s.messages||0}</div></div>
+                <div class="card"><div class="label">Tokens</div><div class="value">${fmt(t)}</div><div class="sub">In: ${fmt(s.tokens_in||0)} / Out: ${fmt(s.tokens_out||0)}</div></div>
+                <div class="card"><div class="label">Commands</div><div class="value">${s.commands||0}</div></div>
+                <div class="card"><div class="label">Errors</div><div class="value" style="color:${s.errors>0?'#f7768e':'#9ece6a'}">${s.errors||0}</div></div>
+                <div class="card"><div class="label">Est. Cost</div><div class="value">$${(s.cost_estimate||0).toFixed(2)}</div></div>`;
+
+            const agents = await get(`${BASE}/telemetry/agents?days=${days}`);
+            const atb = document.querySelector('#agent-table tbody');
+            if (!agents||!agents.length) { atb.innerHTML='<tr><td colspan="4" class="empty">No data</td></tr>'; }
+            else { const mx=Math.max(...agents.map(a=>a.messages)); atb.innerHTML=agents.map(a=>`<tr><td>${a.agent}</td><td>${a.messages}</td><td>${fmt(a.tokens)}</td><td><span class="bar" style="width:${Math.round(a.messages/mx*100)}px"></span> ${Math.round(a.messages/mx*100)}%</td></tr>`).join(''); }
+
+            const cmds = await get(`${BASE}/telemetry/commands?days=${days}`);
+            const ctb = document.querySelector('#cmd-table tbody');
+            if (!cmds||!cmds.length) { ctb.innerHTML='<tr><td colspan="3" class="empty">No commands</td></tr>'; }
+            else { ctb.innerHTML=cmds.map(c=>`<tr><td style="font-size:0.75rem">${c.command}</td><td>${c.count}</td><td>${(c.avg_ms/1000).toFixed(1)}s</td></tr>`).join(''); }
+
+            const errs = await get(`${BASE}/telemetry/errors?days=${days}`);
+            const etb = document.querySelector('#error-table tbody');
+            if (!errs||!errs.length) { etb.innerHTML='<tr><td colspan="3" class="empty">No errors 🎉</td></tr>'; }
+            else { etb.innerHTML=errs.map(e=>`<tr><td>${e.agent}</td><td><span class="pill-error">${e.count}</span></td><td style="font-size:0.75rem">${e.last_error}</td></tr>`).join(''); }
+        }
+        loadAll(1);
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+/* Code Agents — Syntax Highlighting Theme
+   Matches the "Terminal Noir" design system per-theme.
+*/
+
+/* ---- Dark theme (default) ---- */
+.hl-keyword  { color: #c678dd; }
+.hl-string   { color: #98c379; }
+.hl-number   { color: #d19a66; }
+.hl-comment  { color: #5c6370; font-style: italic; }
+.hl-type     { color: #e5c07b; }
+.hl-function { color: #61afef; }
+.hl-decorator { color: #c678dd; font-style: italic; }
+.hl-operator { color: #56b6c2; }
+
+/* ---- Light theme ---- */
+:root[data-theme="light"] .hl-keyword  { color: #a626a4; }
+:root[data-theme="light"] .hl-string   { color: #50a14f; }
+:root[data-theme="light"] .hl-number   { color: #986801; }
+:root[data-theme="light"] .hl-comment  { color: #a0a1a7; font-style: italic; }
+:root[data-theme="light"] .hl-type     { color: #c18401; }
+:root[data-theme="light"] .hl-function { color: #4078f2; }
+:root[data-theme="light"] .hl-decorator { color: #a626a4; font-style: italic; }
+:root[data-theme="light"] .hl-operator { color: #0184bc; }
+
+/* ---- High contrast ---- */
+:root[data-theme="high-contrast"] .hl-keyword  { color: #ff79c6; }
+:root[data-theme="high-contrast"] .hl-string   { color: #50fa7b; }
+:root[data-theme="high-contrast"] .hl-number   { color: #ffb86c; }
+:root[data-theme="high-contrast"] .hl-comment  { color: #6272a4; font-style: italic; }
+:root[data-theme="high-contrast"] .hl-type     { color: #f1fa8c; }
+:root[data-theme="high-contrast"] .hl-function { color: #8be9fd; }
+:root[data-theme="high-contrast"] .hl-decorator { color: #ff79c6; font-style: italic; }
+:root[data-theme="high-contrast"] .hl-operator { color: #8be9fd; }

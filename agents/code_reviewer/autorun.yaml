@@ -1,0 +1,17 @@
+allow:
+  - "cat "
+  - "ls "
+  - "grep "
+  - "find "
+  - "git log"
+  - "git diff"
+  - "git status"
+  - "git show"
+  - "git blame"
+block:
+  - "rm "
+  - "git push"
+  - "git checkout"
+  - "git reset"
+  - "http://"
+  - "https://"

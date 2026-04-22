@@ -1,0 +1,24 @@
+allow:
+  - "cat "
+  - "ls "
+  - "grep "
+  - "find "
+  - "head "
+  - "tail "
+  - "wc "
+  - "rg "                    # ripgrep (from explore)
+  - "tree "                  # directory tree (from explore)
+  - "git log"
+  - "git diff"
+  - "git status"
+  - "git show"
+  - "git branch"             # list branches (from explore)
+  - "http://127.0.0.1"       # knowledge graph API queries
+  - "http://localhost"        # knowledge graph API queries
+block:
+  - "rm "
+  - "git push"
+  - "git checkout"
+  - "git reset"
+  - "http://"
+  - "https://"

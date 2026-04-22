@@ -1,0 +1,103 @@
+# Global auto-run allowlist — applies to ALL agents.
+#
+# These common read-only commands are safe to auto-execute without asking.
+# Per-agent autorun.yaml can add more allows or override with blocks.
+# Block always takes priority over allow (both global and per-agent).
+
+allow:
+  # File inspection
+  - "ls "
+  - "ls -"
+  - "cat "
+  - "head "
+  - "tail "
+  - "wc "
+  - "file "
+  - "stat "
+
+  # Search
+  - "grep "
+  - "rg "
+  - "find "
+  - "which "
+  - "locate "
+
+  # System info
+  - "pwd"
+  - "whoami"
+  - "hostname"
+  - "uname"
+  - "env "
+  - "printenv"
+  - "echo "
+  - "date"
+  - "df "
+  - "du "
+  - "free"
+  - "uptime"
+
+  # Text processing (read-only)
+  - "jq "
+  - "sort "
+  - "uniq "
+  - "cut "
+  - "tr "
+  - "sed -n"         # print-only sed (no -i)
+  - "awk "
+  - "diff "
+
+  # Git read-only
+  - "git status"
+  - "git log"
+  - "git diff"
+  - "git branch"
+  - "git show"
+  - "git remote -v"
+  - "git rev-parse"
+  - "git describe"
+  - "git blame"
+  - "git tag -l"
+  - "git stash list"
+
+  # Network read-only
+  - "curl -sS \"http://127.0.0.1"   # local API calls
+  - "curl -s \"http://127.0.0.1"    # local API calls
+
+  # Process inspection
+  - "ps "
+  - "pgrep "
+  - "lsof "
+
+  # Python/Node inspection
+  - "python --version"
+  - "python3 --version"
+  - "node --version"
+  - "npm --version"
+  - "java -version"
+  - "mvn --version"
+  - "gradle --version"
+  - "poetry --version"
+
+block:
+  # NEVER auto-run destructive commands (override any allow)
+  - "rm "
+  - "rm -"
+  - "rmdir"
+  - "git push"
+  - "git reset --hard"
+  - "git checkout -- "
+  - "git clean"
+  - "git branch -D"
+  - "-X DELETE"
+  - "DROP TABLE"
+  - "DROP DATABASE"
+  - "truncate"
+  - "kill "
+  - "killall"
+  - "pkill"
+  - "shutdown"
+  - "reboot"
+  - "mkfs"
+  - "dd if="
+  - "chmod 777"
+  - "sed -i"           # in-place file modification

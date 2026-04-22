@@ -1,0 +1,51 @@
+.DS_Store
+.webui_secret_key
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+.env
+.env.*
+.venv/
+venv/
+env/
+
+node_modules/
+*.vsix
+extensions/intellij/gradle/cacerts
+extensions/intellij/.gradle/
+
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage*.json
+cov_*.json
+
+poetry.toml
+
+# Logs
+logs/
+
+# Local agent debug NDJSON (session tooling)
+agent-debug-3c95a1.log
+
+# graphify (knowledge graph outputs; optional ./raw corpus)
+graphify-out/
+
+# Local Settings, Caches, and Logs
+*.local.json
+*.cache.json
+*.log
+code_agents/logs/

@@ -1,0 +1,11 @@
+# Code style quality gates — loaded by audit_orchestrator.load_gates()
+gates:
+  - name: "No wildcard imports"
+    check: "_gate_no_wildcard_imports"
+    severity: "warning"
+    description: "Prevent 'from X import *' which pollutes namespace"
+
+  - name: "Constructor injection only"
+    check: "_gate_constructor_injection"
+    severity: "info"
+    description: "Avoid service locator anti-pattern"

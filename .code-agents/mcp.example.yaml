@@ -1,0 +1,42 @@
+# MCP Server Configuration
+# Copy to ~/.code-agents/mcp.yaml (global) or .code-agents/mcp.yaml (per-repo)
+#
+# Servers can use stdio (command + args) or HTTP SSE (url) transport.
+# Restrict to specific agents with the 'agents' field (empty = all agents).
+
+servers:
+  # Filesystem access
+  # filesystem:
+  #   command: npx
+  #   args: ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/allowed/dir"]
+
+  # GitHub integration
+  # github:
+  #   command: npx
+  #   args: ["-y", "@modelcontextprotocol/server-github"]
+  #   env:
+  #     GITHUB_TOKEN: "${GITHUB_TOKEN}"
+  #   agents: ["git-ops", "code-reviewer", "auto-pilot"]
+
+  # Slack notifications
+  # slack:
+  #   command: npx
+  #   args: ["-y", "@modelcontextprotocol/server-slack"]
+  #   env:
+  #     SLACK_BOT_TOKEN: "${SLACK_BOT_TOKEN}"
+
+  # PostgreSQL database
+  # postgres:
+  #   command: npx
+  #   args: ["-y", "@modelcontextprotocol/server-postgres", "postgresql://user:pass@localhost/db"]
+  #   agents: ["redash-query"]
+
+  # Custom MCP server
+  # custom:
+  #   command: python
+  #   args: ["path/to/my_server.py"]
+  #   agents: ["code-writer"]
+
+  # HTTP SSE transport (for remote MCP servers)
+  # remote-tools:
+  #   url: "http://localhost:3001/sse"

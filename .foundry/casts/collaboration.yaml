@@ -1,0 +1,16 @@
+# Collaboration quality gates — loaded by audit_orchestrator.load_gates()
+gates:
+  - name: "Commit message format"
+    check: "_gate_commit_format"
+    severity: "warning"
+    description: "Enforce conventional commits (feat/fix/docs/etc)"
+
+  - name: "Branch naming convention"
+    check: "_gate_branch_naming"
+    severity: "info"
+    description: "Branch names follow feat/fix/hotfix/release pattern"
+
+  - name: "No force pushes"
+    check: "_gate_no_force_push"
+    severity: "warning"
+    description: "Detect force pushes in git reflog"

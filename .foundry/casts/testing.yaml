@@ -1,0 +1,11 @@
+# Testing quality gates — loaded by audit_orchestrator.load_gates()
+gates:
+  - name: "All tests pass"
+    check: "_gate_tests_pass"
+    severity: "critical"
+    description: "Verify pytest test collection succeeds"
+
+  - name: "Tests alongside features"
+    check: "_gate_tests_with_features"
+    severity: "info"
+    description: "Every source module should have a corresponding test file"

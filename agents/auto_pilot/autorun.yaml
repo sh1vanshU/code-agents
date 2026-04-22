@@ -1,0 +1,31 @@
+# Per-agent auto-run configuration for auto-pilot
+#
+# Commands matching 'allow' patterns auto-run without asking.
+# Commands matching 'block' patterns ALWAYS ask.
+# Most specific (longest) matching pattern wins; ties favor allow.
+# Patterns are case-insensitive substring matches.
+
+allow:
+  - "http://127.0.0.1"      # all curl commands to local API server
+  - "http://localhost"       # alternate local server URL
+  - "/jenkins/jobs"          # list jobs
+  - "/jenkins/build/"        # build status/logs
+  - "/git/current-branch"
+  - "/git/status"
+  - "/git/branches"
+  - "/git/log"
+  - "/git/diff"
+  - "/argocd/apps/"          # app status, pods, logs
+  - "/v1/agents"             # list agents
+  - "/testing/coverage"      # coverage report
+  - "/kibana/"               # log search
+  - "/k8s/"                  # kubernetes queries
+
+block:
+  - "rm "                    # never auto-delete
+  - "git push"               # never auto-push
+  - "-X DELETE"              # never auto-delete via API
+  - "/rollback"              # rollback is critical — always ask
+  - "/jenkins/build-and-wait" # build/deploy trigger — always ask
+  - "http://"                # block non-local URLs (allow patterns take priority for local)
+  - "https://"               # block external URLs

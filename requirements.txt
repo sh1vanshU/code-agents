@@ -1,0 +1,5 @@
+# Application dependencies are managed with Poetry — see pyproject.toml:
+#   poetry install
+#
+# Optional — Open WebUI (browser UI). Requires Python 3.11 or 3.12; see README
+# (Open WebUI Integration). Example: pipx install open-webui --python python3.12

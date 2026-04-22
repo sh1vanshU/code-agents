@@ -1,0 +1,30 @@
+# Per-agent auto-run configuration for git-ops
+
+allow:
+  - "git status"
+  - "git log"
+  - "git diff"
+  - "git branch"
+  - "git show"
+  - "git remote -v"
+  - "git rev-parse"
+  - "git fetch"
+  - "http://127.0.0.1"
+  - "http://localhost"
+  - "/git/status"
+  - "/git/current-branch"
+  - "/git/branches"
+  - "/git/log"
+  - "/git/diff"
+
+block:
+  - "rm "
+  - "git push --force"
+  - "git push -f"
+  - "git reset --hard"
+  - "git clean"
+  - "git checkout -- "
+  - "git restore --staged"
+  - "-X DELETE"
+  - "http://"
+  - "https://"

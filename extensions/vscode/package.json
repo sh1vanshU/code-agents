@@ -1,0 +1,148 @@
+{
+  "name": "code-agents",
+  "displayName": "Code Agents",
+  "description": "13 specialist AI agents for CI/CD, code review, testing, security, and DevOps — all from your IDE",
+  "version": "1.0.0",
+  "publisher": "code-agents",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/code-agents-org/code-agents.git",
+    "directory": "extensions/vscode"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["AI", "Chat", "Programming Languages", "Testing", "Other"],
+  "keywords": ["ai", "agents", "cicd", "code-review", "testing", "devops", "security"],
+  "icon": "assets/icon.png",
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "code-agents",
+          "title": "Code Agents",
+          "icon": "assets/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "code-agents": [
+        {
+          "type": "webview",
+          "id": "codeAgents.chatView",
+          "name": "Chat"
+        }
+      ]
+    },
+    "commands": [
+      { "command": "codeAgents.openChat", "title": "Open Chat", "category": "Code Agents", "icon": "$(comment-discussion)" },
+      { "command": "codeAgents.newChat", "title": "New Chat", "category": "Code Agents", "icon": "$(add)" },
+      { "command": "codeAgents.switchAgent", "title": "Switch Agent", "category": "Code Agents" },
+      { "command": "codeAgents.reviewCode", "title": "Review Code", "category": "Code Agents" },
+      { "command": "codeAgents.writeTests", "title": "Write Tests", "category": "Code Agents" },
+      { "command": "codeAgents.explainCode", "title": "Explain Code", "category": "Code Agents" },
+      { "command": "codeAgents.fixCode", "title": "Fix Bug", "category": "Code Agents" },
+      { "command": "codeAgents.buildDeploy", "title": "Build & Deploy", "category": "Code Agents" },
+      { "command": "codeAgents.securityScan", "title": "Security Scan", "category": "Code Agents" },
+      { "command": "codeAgents.addToChat", "title": "Add to Code Agents Chat", "category": "Code Agents" }
+    ],
+    "submenus": [
+      { "id": "codeAgents.submenu", "label": "Code Agents" }
+    ],
+    "menus": {
+      "view/title": [
+        { "command": "codeAgents.newChat", "when": "view == codeAgents.chatView", "group": "navigation" }
+      ],
+      "editor/context": [
+        { "submenu": "codeAgents.submenu", "group": "codeAgents" }
+      ],
+      "codeAgents.submenu": [
+        { "command": "codeAgents.reviewCode", "group": "1_code@1", "when": "editorHasSelection" },
+        { "command": "codeAgents.writeTests", "group": "1_code@2", "when": "editorHasSelection" },
+        { "command": "codeAgents.explainCode", "group": "1_code@3", "when": "editorHasSelection" },
+        { "command": "codeAgents.fixCode", "group": "1_code@4", "when": "editorHasSelection" },
+        { "command": "codeAgents.addToChat", "group": "2_chat@1" },
+        { "command": "codeAgents.securityScan", "group": "3_ops@1" },
+        { "command": "codeAgents.buildDeploy", "group": "3_ops@2" }
+      ]
+    },
+    "keybindings": [
+      { "command": "codeAgents.openChat", "key": "ctrl+'", "mac": "cmd+'" },
+      { "command": "codeAgents.addToChat", "key": "ctrl+shift+'", "mac": "cmd+shift+'", "when": "editorHasSelection" },
+      { "command": "codeAgents.newChat", "key": "ctrl+shift+n", "mac": "cmd+shift+n" }
+    ],
+    "configuration": {
+      "title": "Code Agents",
+      "properties": {
+        "codeAgents.serverUrl": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "Code Agents server URL"
+        },
+        "codeAgents.defaultAgent": {
+          "type": "string",
+          "default": "auto-pilot",
+          "enum": ["auto-pilot", "code-writer", "code-reviewer", "code-reasoning", "code-tester",
+                   "test-coverage", "qa-regression", "jenkins-cicd", "argocd-verify", "git-ops",
+                   "jira-ops", "redash-query", "security"],
+          "description": "Default agent for new conversations"
+        },
+        "codeAgents.theme": {
+          "type": "string",
+          "enum": ["auto", "dark", "light", "high-contrast"],
+          "default": "auto",
+          "description": "Chat panel color theme"
+        },
+        "codeAgents.autoStartServer": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically start code-agents server on extension activation"
+        },
+        "codeAgents.autoRun": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-execute safe agent commands"
+        },
+        "codeAgents.requireConfirm": {
+          "type": "boolean",
+          "default": true,
+          "description": "Require confirmation before executing commands"
+        },
+        "codeAgents.contextWindow": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 20,
+          "description": "Number of conversation pairs to keep in context"
+        },
+        "codeAgents.statusPollingInterval": {
+          "type": "number",
+          "default": 15000,
+          "description": "Server health check interval in milliseconds"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "build:webview": "cd webview-ui && npm install && npm run build",
+    "test:webview": "cd webview-ui && npm test",
+    "test": "npm run test:webview",
+    "package": "npm run build:webview && node esbuild.mjs --production",
+    "verify": "npm run lint && npm run test && npm run package",
+    "vscode:prepublish": "npm run package",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.0"
+  }
+}

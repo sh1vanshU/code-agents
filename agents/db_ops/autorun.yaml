@@ -1,0 +1,23 @@
+allow:
+  - "http://127.0.0.1"
+  - "http://localhost"
+  - "/db/databases"
+  - "/db/schemas"
+  - "/db/tables"
+  - "/db/explain"
+  - "/db/activity"
+
+block:
+  - "rm "
+  - "git push"
+  - "-X DELETE"
+  - "/db/query"
+  - "/db/migration"
+  - "DROP "
+  - "DELETE "
+  - "TRUNCATE "
+  - "ALTER "
+  - "UPDATE "
+  - "INSERT "
+  - "http://"
+  - "https://"

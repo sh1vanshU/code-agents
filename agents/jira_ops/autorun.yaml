@@ -1,0 +1,16 @@
+# Per-agent auto-run configuration for jira-ops
+
+allow:
+  - "http://127.0.0.1"       # local API server
+  - "http://localhost"        # alternate local URL
+  - "/jira/issue/"            # read ticket — read-only
+  - "/jira/search"            # JQL search — read-only
+  - "/jira/confluence/"       # read wiki page — read-only
+
+block:
+  - "rm "
+  - "git push"
+  - "-X DELETE"
+  - "/transition"             # status transitions — always ask
+  - "http://"                 # block non-local URLs
+  - "https://"                # block external URLs

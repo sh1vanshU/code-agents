@@ -1,0 +1,11 @@
+# Endpoint Test Config — per-repo settings for /endpoints run
+# Copy to .code-agents/endpoints.yaml in your repo
+
+base_url: http://localhost:8080
+auth_header: ""  # "Bearer ${AUTH_TOKEN}" or leave empty
+timeout: 10  # seconds per request
+
+skip_patterns:
+  - "/actuator/*"
+  - "/internal/*"
+  - "/health"

@@ -1,0 +1,37 @@
+# Sanity Check Rules — per-repo post-deployment verification
+# Copy to .code-agents/sanity.yaml in your repo
+#
+# Each rule queries Kibana logs and checks against a threshold.
+# threshold: 0 = zero tolerance (any match = fail)
+# time_window: how far back to search (5m, 15m, 1h, etc.)
+
+rules:
+  - name: "No 5xx errors"
+    query: "level:ERROR AND status:5*"
+    threshold: 0
+    time_window: "5m"
+    severity: critical
+
+  - name: "Latency under 500ms"
+    query: "response_time:>500"
+    threshold: 10
+    time_window: "5m"
+    severity: warning
+
+  - name: "No OOM kills"
+    query: "OOMKilled OR OutOfMemory"
+    threshold: 0
+    time_window: "10m"
+    severity: critical
+
+  - name: "No panic/fatal"
+    query: "level:FATAL OR panic"
+    threshold: 0
+    time_window: "5m"
+    severity: critical
+
+  - name: "Startup complete"
+    query: "Started Application"
+    threshold: 1
+    time_window: "5m"
+    severity: info

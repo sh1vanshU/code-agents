@@ -1,0 +1,90 @@
+<idea-plugin>
+    <id>com.codeagents.plugin</id>
+    <name>Code Agents</name>
+    <vendor email="support@example.com" url="https://github.com/code-agents-org/code-agents">
+        Acme Corp
+    </vendor>
+    <description><![CDATA[
+        <p>AI-powered code agent platform with 13 specialist agents for CI/CD, code review,
+        testing, security, and DevOps — all from your IDE.</p>
+        <ul>
+            <li><strong>13 Agents</strong>: auto-pilot, code-writer, code-reviewer, code-tester, security, and more</li>
+            <li><strong>Chat Panel</strong>: Interactive chat with streaming responses and markdown rendering</li>
+            <li><strong>Code Actions</strong>: Right-click to review, test, explain, or fix code</li>
+            <li><strong>Plan Mode</strong>: Step-by-step execution plans with approval workflow</li>
+            <li><strong>50+ Slash Commands</strong>: Full access to code-agents features</li>
+        </ul>
+    ]]></description>
+
+    <!-- Platform-only dependency — works in ALL JetBrains IDEs -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Tool Window (right sidebar) -->
+        <toolWindow id="Code Agents"
+                    factoryClass="com.codeagents.plugin.ui.ChatToolWindowFactory"
+                    anchor="right"
+                    icon="/META-INF/pluginIcon.svg"
+                    secondary="false"/>
+
+        <!-- Persistent Settings -->
+        <applicationService
+            serviceImplementation="com.codeagents.plugin.services.PluginSettings"/>
+
+        <!-- Settings Panel: Settings > Tools > Code Agents -->
+        <applicationConfigurable
+            parentId="tools"
+            instance="com.codeagents.plugin.settings.SettingsConfigurable"
+            id="com.codeagents.plugin.settings"
+            displayName="Code Agents"/>
+
+        <!-- Status Bar Widget -->
+        <statusBarWidgetFactory
+            id="CodeAgentsStatus"
+            implementation="com.codeagents.plugin.ui.StatusBarWidgetFactory"/>
+
+        <!-- Notification Group -->
+        <notificationGroup id="Code Agents"
+                           displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <!-- Editor Context Menu Group -->
+        <group id="CodeAgents.EditorMenu"
+               text="Code Agents"
+               popup="true"
+               icon="/META-INF/pluginIcon.svg">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+
+            <action id="CodeAgents.ReviewCode"
+                    class="com.codeagents.plugin.actions.ReviewCodeAction"
+                    text="Review Code"
+                    description="Send to code-reviewer agent"/>
+            <action id="CodeAgents.WriteTests"
+                    class="com.codeagents.plugin.actions.WriteTestsAction"
+                    text="Write Tests"
+                    description="Send to code-tester agent"/>
+            <action id="CodeAgents.ExplainCode"
+                    class="com.codeagents.plugin.actions.ExplainCodeAction"
+                    text="Explain Code"
+                    description="Send to code-reasoning agent"/>
+            <action id="CodeAgents.FixBug"
+                    class="com.codeagents.plugin.actions.FixBugAction"
+                    text="Fix Bug"
+                    description="Send to code-writer agent"/>
+            <action id="CodeAgents.AddToChat"
+                    class="com.codeagents.plugin.actions.AddToChatAction"
+                    text="Add to Chat"
+                    description="Add selection to Code Agents chat"/>
+            <separator/>
+            <action id="CodeAgents.SecurityScan"
+                    class="com.codeagents.plugin.actions.SecurityScanAction"
+                    text="Security Scan"
+                    description="Send to security agent"/>
+            <action id="CodeAgents.BuildDeploy"
+                    class="com.codeagents.plugin.actions.BuildDeployAction"
+                    text="Build &amp; Deploy"
+                    description="Send to jenkins-cicd agent"/>
+        </group>
+    </actions>
+</idea-plugin>

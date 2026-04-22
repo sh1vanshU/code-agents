@@ -1,0 +1,17 @@
+allow:
+  - "http://127.0.0.1"
+  - "http://localhost"
+  - "/pr-review/pulls"
+  - "/pr-review/checklist"
+  - "/git/current-branch"
+  - "/git/status"
+  - "/git/diff"
+  - "/git/log"
+
+block:
+  - "rm "
+  - "git push"
+  - "-X DELETE"
+  - "-X POST"
+  - "http://"
+  - "https://"

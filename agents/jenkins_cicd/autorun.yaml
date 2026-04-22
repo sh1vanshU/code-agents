@@ -1,0 +1,26 @@
+# Per-agent auto-run configuration for jenkins-cicd
+#
+# Commands matching 'allow' patterns auto-run without asking (even in first round).
+# Commands matching 'block' patterns ALWAYS ask (even if safe).
+# Most specific (longest) matching pattern wins; ties favor allow.
+# Patterns are case-insensitive substring matches.
+
+allow:
+  - "/api/json"               # Jenkins read-only API calls (jobs, builds, status)
+  - "/consoleText"            # Jenkins build logs — read-only
+  - "/lastBuild/api"          # Jenkins last build status — read-only
+  - "queue/item/"             # Jenkins queue status — read-only
+  - "/git/current-branch"     # git branch check
+  - "/git/status"             # git status check
+  - "/git/branches"           # list branches
+  - "/git/log"                # commit history
+  - "/git/diff"               # diff between branches
+  - "argocd"                  # ArgoCD app verification (status, pods, logs)
+
+block:
+  - "rm "                     # never auto-delete
+  - "git push"                # never auto-push
+  - "-X DELETE"               # never auto-delete via API
+  - "buildWithParameters"     # build trigger needs approval
+  - "/rollback"               # rollback is critical — always ask
+  - "/sync"                   # sync is destructive — always ask

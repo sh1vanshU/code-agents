@@ -1,0 +1,24 @@
+# Example: Claude backend agent
+#
+# To enable this agent:
+#   1. Rename this file to claude_example.yaml
+#   2. Set ANTHROPIC_API_KEY in your environment (or run: code-agents init)
+#   3. Restart the server
+#
+# claude-agent-sdk is installed by default — no extra steps needed.
+
+name: claude-coder
+display_name: "Claude Coder (Example)"
+backend: claude
+model: "sonnet"
+system_prompt: |
+  You are a coding assistant powered by Claude. You help with code analysis,
+  writing, debugging, and refactoring. You provide clear explanations and
+  follow best practices.
+permission_mode: default
+api_key: ${ANTHROPIC_API_KEY}
+cwd: "."
+stream_tool_activity: true
+include_session: true
+extra_args:
+  mode: ask

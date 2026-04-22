@@ -1,0 +1,20 @@
+---
+description: graphify knowledge graph context
+alwaysApply: true
+---
+
+This project uses [graphify](https://github.com/safishamsi/graphify): a knowledge graph under `graphify-out/` (`GRAPH_REPORT.md`, `graph.json`, optional `graph.html`).
+
+**Folder-wise graphs:** `graphify-out/folders/<slug>/` holds per-slice reports and `graph.html` (see `graphify-out/folders/index.json`). Regenerate with `poetry run python scripts/graphify_by_folder.py`.
+
+- Before answering architecture or codebase questions, read `graphify-out/GRAPH_REPORT.md` for god nodes and community structure.
+- If `graphify-out/wiki/index.md` exists (from `/graphify --wiki`), start navigation there instead of scanning raw files.
+
+After you change **code** locally, refresh the graph without re-running full semantic extraction:
+
+- With **global** install: `graphify update .` from the repo root (AST-only, no LLM).
+- With this repo’s **Poetry** env (`poetry install --with dev`): `poetry run graphify update .`
+
+Optional: `graphify hook install` for post-commit/checkout rebuilds; `graphify query "…" --graph graphify-out/graph.json` for subgraph queries from the terminal.
+
+Corpus scope is controlled by `.graphifyignore` at the repo root.

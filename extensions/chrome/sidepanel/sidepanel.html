@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Agents</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <header id="header">
+    <div class="header-left">
+      <span class="logo">CA</span>
+      <select id="agent-selector" title="Select agent"></select>
+      <span id="status-dot" class="status-dot disconnected" title="Server status"></span>
+    </div>
+    <div class="header-right">
+      <button id="btn-clear" title="New chat">New Chat</button>
+    </div>
+  </header>
+
+  <main id="messages">
+    <div id="welcome" class="welcome">
+      <p class="welcome-title">Code Agents</p>
+      <p class="welcome-sub">Select an agent and start chatting.</p>
+    </div>
+  </main>
+
+  <div id="streaming-indicator" class="streaming-indicator hidden">
+    <span class="dot-pulse"></span>
+    <span>Thinking...</span>
+  </div>
+
+  <footer id="input-area">
+    <textarea
+      id="chat-input"
+      placeholder="Ask something... (Enter to send, Shift+Enter for newline)"
+      rows="1"
+    ></textarea>
+    <button id="btn-send" title="Send message">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 2L11 13"></path>
+        <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+      </svg>
+    </button>
+  </footer>
+
+  <script src="../shared/agents.js"></script>
+  <script src="../shared/api.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

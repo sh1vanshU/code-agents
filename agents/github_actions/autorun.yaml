@@ -1,0 +1,16 @@
+allow:
+  - "http://127.0.0.1"
+  - "http://localhost"
+  - "/github-actions/workflows"
+  - "/github-actions/runs/"
+  - "/github-actions/repo"
+  - "/git/current-branch"
+  - "/git/status"
+
+block:
+  - "rm "
+  - "git push"
+  - "-X DELETE"
+  - "-X POST"
+  - "http://"
+  - "https://"

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Agents</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/ui/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- ─── Sidebar ─────────────────────────────────── -->
+        <aside id="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">
+                    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                        <rect x="2" y="2" width="28" height="28" rx="6" stroke="var(--accent)" stroke-width="2"/>
+                        <path d="M10 16L14 20L22 12" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">Code Agents</span>
+                    <span class="brand-tag">AI Platform</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-view="chat" title="Chat (Ctrl+1)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                    <span>Chat</span>
+                </button>
+                <button class="nav-item" data-view="agents" title="Agents (Ctrl+2)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                    <span>Agents</span>
+                </button>
+                <button class="nav-item" data-view="pipeline" title="Pipeline (Ctrl+3)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    <span>Pipeline</span>
+                </button>
+                <button class="nav-item" data-view="dashboard" title="Dashboard (Ctrl+4)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    <span>Dashboard</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-divider"></div>
+
+            <div class="sidebar-section-label">AGENTS</div>
+            <ul id="agent-list"></ul>
+
+            <div class="sidebar-footer">
+                <div class="server-status" id="server-status">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Connecting...</span>
+                </div>
+                <div class="sidebar-meta">
+                    <span class="kbd-hint" title="Command Palette">Ctrl+K</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ─── Main Content ────────────────────────────── -->
+        <main id="main">
+            <!-- ─── Top Bar ──────────────────────────────── -->
+            <header id="topbar">
+                <button id="sidebar-toggle" title="Toggle sidebar (Ctrl+B)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <div id="topbar-title" class="topbar-title">Chat</div>
+                <div class="topbar-controls">
+                    <button id="cmd-palette-btn" class="topbar-btn" title="Command Palette (Ctrl+K)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </button>
+                    <select id="agent-select" title="Switch agent"></select>
+                    <button id="new-chat-btn" title="New chat (Ctrl+N)">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        <span>New Chat</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- ─── Views ────────────────────────────────── -->
+            <!-- CHAT VIEW -->
+            <div id="view-chat" class="view active">
+                <div id="chat-area">
+                    <div id="messages">
+                        <div class="welcome-screen">
+                            <div class="welcome-glow"></div>
+                            <h1 class="welcome-title">Code Agents</h1>
+                            <p class="welcome-subtitle">AI-powered code intelligence. Select an agent and start building.</p>
+                            <div class="welcome-grid">
+                                <button class="welcome-card" data-action="Review the latest changes and provide feedback">
+                                    <div class="wc-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    </div>
+                                    <div class="wc-label">Review Code</div>
+                                    <div class="wc-desc">Analyze recent changes</div>
+                                </button>
+                                <button class="welcome-card" data-action="Run the test suite and report results">
+                                    <div class="wc-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                                    </div>
+                                    <div class="wc-label">Run Tests</div>
+                                    <div class="wc-desc">Execute test suite</div>
+                                </button>
+                                <button class="welcome-card" data-action="Show git status, recent commits, and branch info">
+                                    <div class="wc-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/></svg>
+                                    </div>
+                                    <div class="wc-label">Git Status</div>
+                                    <div class="wc-desc">Branch & commit info</div>
+                                </button>
+                                <button class="welcome-card" data-action="Check deployment health and ArgoCD sync status">
+                                    <div class="wc-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                    </div>
+                                    <div class="wc-label">Check Deploy</div>
+                                    <div class="wc-desc">Health & sync status</div>
+                                </button>
+                            </div>
+                            <div class="welcome-hint">
+                                <kbd>Ctrl</kbd><span>+</span><kbd>K</kbd> command palette
+                                <span class="hint-sep">|</span>
+                                <kbd>Enter</kbd> send message
+                                <span class="hint-sep">|</span>
+                                <kbd>Shift</kbd><span>+</span><kbd>Enter</kbd> new line
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="scroll-bottom" class="scroll-bottom" title="Scroll to bottom">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+
+                <div id="input-area">
+                    <div id="input-wrapper">
+                        <div id="input-agent-pill" class="input-agent-pill"></div>
+                        <textarea id="user-input" placeholder="Message Code Agents..." rows="1"></textarea>
+                        <span id="char-count" class="char-count"></span>
+                        <button id="send-btn" title="Send message (Enter)">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="input-footer">
+                        <span class="input-hint">Enter to send, Shift+Enter for new line</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AGENTS VIEW -->
+            <div id="view-agents" class="view">
+                <div class="view-scroll">
+                    <div class="view-header">
+                        <h2>Agents</h2>
+                        <p class="view-desc">AI specialists available in your platform</p>
+                    </div>
+                    <div id="agents-grid" class="agents-grid"></div>
+                </div>
+            </div>
+
+            <!-- PIPELINE VIEW -->
+            <div id="view-pipeline" class="view">
+                <div class="view-scroll">
+                    <div class="view-header">
+                        <h2>CI/CD Pipeline</h2>
+                        <p class="view-desc">Track builds, deployments, and verification</p>
+                        <div class="view-actions">
+                            <button class="btn-primary" id="start-pipeline-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                Start Pipeline
+                            </button>
+                        </div>
+                    </div>
+                    <div id="pipeline-visual" class="pipeline-visual"></div>
+                    <div class="pipeline-panels">
+                        <div class="panel" id="jenkins-panel">
+                            <div class="panel-header">
+                                <h3>Jenkins Builds</h3>
+                                <span class="panel-badge" id="jenkins-count">0</span>
+                            </div>
+                            <div class="panel-body" id="jenkins-list">
+                                <div class="panel-empty">No active builds</div>
+                            </div>
+                        </div>
+                        <div class="panel" id="argocd-panel">
+                            <div class="panel-header">
+                                <h3>ArgoCD Apps</h3>
+                                <span class="panel-badge" id="argocd-count">0</span>
+                            </div>
+                            <div class="panel-body" id="argocd-list">
+                                <div class="panel-empty">No applications</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DASHBOARD VIEW -->
+            <div id="view-dashboard" class="view">
+                <div class="view-scroll">
+                    <div class="view-header">
+                        <h2>Dashboard</h2>
+                        <p class="view-desc">Usage analytics and system telemetry</p>
+                        <div class="view-actions">
+                            <div class="time-filter">
+                                <button class="tf-btn active" data-days="1">Today</button>
+                                <button class="tf-btn" data-days="7">7 days</button>
+                                <button class="tf-btn" data-days="30">30 days</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-row" id="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-icon sc-sessions">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                            </div>
+                            <div class="stat-data">
+                                <div class="stat-value" id="stat-sessions">—</div>
+                                <div class="stat-label">Sessions</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon sc-messages">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                            </div>
+                            <div class="stat-data">
+                                <div class="stat-value" id="stat-messages">—</div>
+                                <div class="stat-label">Messages</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon sc-tokens">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                            </div>
+                            <div class="stat-data">
+                                <div class="stat-value" id="stat-tokens">—</div>
+                                <div class="stat-label">Tokens</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon sc-cost">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                            </div>
+                            <div class="stat-data">
+                                <div class="stat-value" id="stat-cost">—</div>
+                                <div class="stat-label">Est. Cost</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon sc-errors">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                            </div>
+                            <div class="stat-data">
+                                <div class="stat-value" id="stat-errors">—</div>
+                                <div class="stat-label">Errors</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="panel panel-wide">
+                            <div class="panel-header">
+                                <h3>Agent Usage</h3>
+                            </div>
+                            <div class="panel-body" id="agent-usage-chart"></div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-header">
+                                <h3>Top Commands</h3>
+                            </div>
+                            <div class="panel-body" id="top-commands"></div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-header">
+                                <h3>Recent Errors</h3>
+                            </div>
+                            <div class="panel-body" id="recent-errors"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- ─── Command Palette ──────────────────────────── -->
+        <div id="cmd-palette" class="cmd-palette hidden">
+            <div class="cmd-overlay"></div>
+            <div class="cmd-dialog">
+                <div class="cmd-input-wrap">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input id="cmd-input" type="text" placeholder="Type a command..." autocomplete="off" spellcheck="false">
+                    <kbd class="cmd-esc">ESC</kbd>
+                </div>
+                <div id="cmd-results" class="cmd-results"></div>
+            </div>
+        </div>
+
+        <!-- ─── Toast Notifications ──────────────────────── -->
+        <div id="toast-container" class="toast-container"></div>
+    </div>
+
+    <script src="/ui/app.js"></script>
+</body>
+</html>

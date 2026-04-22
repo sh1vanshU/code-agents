@@ -1,0 +1,27 @@
+# Files and directories agents should NOT read or index.
+# Gitignore-style patterns. Lines starting with # are comments.
+# Prefix with ! to force-include a file.
+#
+# Examples:
+#   *.log             # ignore all log files
+#   /vendor/          # ignore vendor directory
+#   secret*.json      # ignore secret config files
+#   !important.log    # force-include this file
+
+# Common ignores
+*.log
+*.env
+*.key
+*.pem
+*.p12
+*.jks
+credentials*
+secrets*
+.env.*
+node_modules/
+target/
+dist/
+build/
+.gradle/
+__pycache__/
+*.pyc

@@ -1,0 +1,18 @@
+allow:
+  - "http://127.0.0.1"
+  - "http://localhost"
+  - "/terraform/state"
+  - "/terraform/output"
+  - "/terraform/providers"
+  - "/terraform/validate"
+  - "/git/current-branch"
+  - "/git/status"
+
+block:
+  - "rm "
+  - "git push"
+  - "-X DELETE"
+  - "/terraform/apply"
+  - "/terraform/destroy"
+  - "http://"
+  - "https://"

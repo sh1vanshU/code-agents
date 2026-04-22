@@ -1,0 +1,22 @@
+# graphify corpus exclusions (same syntax as .gitignore)
+# https://github.com/safishamsi/graphify/blob/v4/README.md
+
+node_modules/
+.venv/
+venv/
+env/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+coverage*.json
+.coverage
+
+# Do not ingest prior graph outputs as corpus
+graphify-out/graph.json
+graphify-out/graph.html
+graphify-out/*.graphml
+graphify-out/*.svg

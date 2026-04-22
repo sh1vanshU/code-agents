@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Gradle wrapper — handles corporate SSL trust automatically
+# Priority: local cacerts (with corporate CA) > macOS Keychain > system default
+
+APP_HOME=$( cd "${0%"${0##*/}"}." > /dev/null && pwd -P ) || exit
+
+SSL_OPTS=""
+if [ -f "$APP_HOME/gradle/cacerts" ]; then
+    # Local cacerts with corporate CA imported
+    SSL_OPTS="-Djavax.net.ssl.trustStore=$APP_HOME/gradle/cacerts -Djavax.net.ssl.trustStorePassword=changeit"
+elif [ "$(uname)" = "Darwin" ]; then
+    # macOS Keychain trust store
+    SSL_OPTS="-Djavax.net.ssl.trustStoreType=KeychainStore"
+fi
+
+JAVACMD=${JAVA_HOME:+$JAVA_HOME/bin/}java
+
+exec "$JAVACMD" \
+    $SSL_OPTS \
+    -Dorg.gradle.appname="${0##*/}" \
+    -classpath "$APP_HOME/gradle/wrapper/gradle-wrapper.jar" \
+    org.gradle.wrapper.GradleWrapperMain \
+    "$@"

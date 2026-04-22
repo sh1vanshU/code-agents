@@ -1,0 +1,16 @@
+allow:
+  - "http://127.0.0.1"
+  - "http://localhost"
+  - "/grafana/health"
+  - "/grafana/dashboards"
+  - "/grafana/panels/query"
+  - "/grafana/alerts"
+  - "/grafana/annotations"
+  - "/grafana/datasources"
+
+block:
+  - "rm "
+  - "git push"
+  - "-X DELETE"
+  - "http://"
+  - "https://"

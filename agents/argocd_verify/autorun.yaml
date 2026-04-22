@@ -1,0 +1,23 @@
+# Per-agent auto-run configuration for argocd-verify
+#
+# Commands matching 'allow' patterns auto-run without asking.
+# Commands matching 'block' patterns ALWAYS ask.
+# Most specific (longest) matching pattern wins; ties favor allow.
+# Patterns are case-insensitive substring matches.
+
+allow:
+  - "http://127.0.0.1"      # all curl commands to local API server
+  - "http://localhost"       # alternate local server URL
+  - "/argocd/apps/"          # app status, pods, logs, history, sync, wait-sync
+  - "/git/status"
+  - "/git/current-branch"
+  - "/kibana/"               # log search
+  - "/k8s/"                  # kubernetes queries
+
+block:
+  - "rm "                    # never auto-delete
+  - "git push"               # never auto-push
+  - "-X DELETE"              # never auto-delete via API
+  - "/rollback"              # rollback is critical — always ask user first
+  - "http://"                # block non-local URLs (allow patterns take priority for local)
+  - "https://"               # block external URLs

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Agents — Team Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'SF Mono', 'Fira Code', monospace; background: #1a1b26; color: #c0caf5; padding: 2rem; }
+        h1 { color: #7aa2f7; font-size: 1.5rem; margin-bottom: 1.5rem; }
+        h2 { color: #bb9af7; font-size: 1.1rem; margin: 1.5rem 0 0.8rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .card { background: #24283b; border-radius: 8px; padding: 1.2rem; border: 1px solid #414868; }
+        .card .label { color: #565f89; font-size: 0.75rem; text-transform: uppercase; }
+        .card .value { color: #c0caf5; font-size: 1.8rem; font-weight: bold; margin: 0.3rem 0; }
+        .card .sub { color: #565f89; font-size: 0.8rem; }
+        table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; }
+        th { text-align: left; color: #565f89; font-size: 0.75rem; text-transform: uppercase; padding: 0.5rem; border-bottom: 1px solid #414868; }
+        td { padding: 0.5rem; border-bottom: 1px solid #292e42; color: #a9b1d6; font-size: 0.85rem; }
+        .bar { height: 8px; border-radius: 4px; display: inline-block; vertical-align: middle; }
+        .bar-blue { background: #7aa2f7; }
+        .bar-green { background: #9ece6a; }
+        .bar-purple { background: #bb9af7; }
+        .pill { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; }
+        .pill-success { background: #1a3a1a; color: #9ece6a; }
+        .pill-error { background: #3a1a1a; color: #f7768e; }
+        .pill-warn { background: #3a3a1a; color: #e0af68; }
+        .pill-info { background: #1a2a3a; color: #7aa2f7; }
+        .pill-neutral { background: #292e42; color: #a9b1d6; }
+        .empty { color: #565f89; font-style: italic; padding: 1rem; }
+        a { color: #7aa2f7; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .nav { margin-bottom: 1rem; font-size: 0.85rem; }
+        .nav a { margin-right: 1rem; }
+        .refresh-info { color: #565f89; font-size: 0.75rem; float: right; margin-top: -2.5rem; }
+        .actions { display: flex; gap: 0.8rem; flex-wrap: wrap; margin: 0.8rem 0; }
+        .btn { background: #24283b; border: 1px solid #414868; color: #c0caf5; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 0.85rem; transition: all 0.2s; }
+        .btn:hover { border-color: #7aa2f7; background: #292e42; }
+        .btn-primary { background: #7aa2f7; color: #1a1b26; border-color: #7aa2f7; }
+        .btn-primary:hover { background: #89b4fa; }
+        .btn-green { background: #9ece6a; color: #1a1b26; border-color: #9ece6a; }
+        .btn-green:hover { background: #a9d879; }
+        .btn-purple { background: #bb9af7; color: #1a1b26; border-color: #bb9af7; }
+        .btn-purple:hover { background: #c8abf7; }
+        .section { background: #24283b; border-radius: 8px; padding: 1.2rem; border: 1px solid #414868; margin-bottom: 1rem; }
+        .chart-bar-row { display: flex; align-items: center; margin: 0.4rem 0; }
+        .chart-bar-label { width: 120px; font-size: 0.8rem; color: #a9b1d6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .chart-bar-track { flex: 1; background: #292e42; border-radius: 4px; height: 18px; margin: 0 0.5rem; position: relative; }
+        .chart-bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+        .chart-bar-value { width: 60px; font-size: 0.8rem; color: #565f89; text-align: right; }
+        .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+        .dot-green { background: #9ece6a; }
+        .dot-red { background: #f7768e; }
+        .dot-yellow { background: #e0af68; }
+        .dot-blue { background: #7aa2f7; }
+    </style>
+</head>
+<body>
+    <div class="nav"><a href="/ui">&larr; Chat</a><a href="/telemetry-dashboard">Telemetry</a></div>
+    <h1>Team Dashboard</h1>
+    <div class="refresh-info" id="refresh-info">Auto-refresh: 30s</div>
+
+    <!-- Summary Cards -->
+    <div class="grid" id="summary-cards">
+        <div class="card"><div class="label">Active Sessions</div><div class="value" id="active-sessions">--</div><div class="sub" id="active-agents-sub">loading...</div></div>
+        <div class="card"><div class="label">Messages Today</div><div class="value" id="messages-today">--</div></div>
+        <div class="card"><div class="label">Tokens Today</div><div class="value" id="tokens-today">--</div><div class="sub" id="tokens-sub">--</div></div>
+        <div class="card"><div class="label">Est. Cost Today</div><div class="value" id="cost-today">--</div></div>
+        <div class="card"><div class="label">Active Pipelines</div><div class="value" id="pipelines-count">--</div></div>
+    </div>
+
+    <!-- Quick Actions -->
+    <h2>Quick Actions</h2>
+    <div class="actions">
+        <button class="btn btn-primary" onclick="startPipeline()">Start Pipeline</button>
+        <button class="btn btn-green" onclick="runTests()">Run Tests</button>
+        <button class="btn btn-purple" onclick="codeReview()">Code Review</button>
+    </div>
+
+    <div class="grid-2">
+        <!-- Left column -->
+        <div>
+            <!-- Active Sessions -->
+            <h2>Active Sessions</h2>
+            <div class="section" id="sessions-section">
+                <div class="empty">Loading...</div>
+            </div>
+
+            <!-- Agent Usage Chart -->
+            <h2>Agent Usage (Messages)</h2>
+            <div class="section" id="agent-chart">
+                <div class="empty">Loading...</div>
+            </div>
+
+            <!-- Token Burn -->
+            <h2>Token Burn</h2>
+            <div class="section" id="token-burn">
+                <div class="empty">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Right column -->
+        <div>
+            <!-- Pipeline Status -->
+            <h2>Pipeline Status</h2>
+            <div class="section" id="pipeline-section">
+                <div class="empty">Loading...</div>
+            </div>
+
+            <!-- Deploy Status (ArgoCD) -->
+            <h2>Deploy Status</h2>
+            <div class="section" id="deploy-section">
+                <div class="empty">Loading...</div>
+            </div>
+
+            <!-- Build Status (Jenkins) -->
+            <h2>Build Status</h2>
+            <div class="section" id="build-section">
+                <div class="empty">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BASE = window.location.origin;
+        const AGENT_COLORS = ['#7aa2f7','#bb9af7','#9ece6a','#e0af68','#f7768e','#7dcfff','#ff9e64','#73daca','#b4f9f8','#c0caf5','#89ddff','#ff007c','#2ac3de','#d5a6bd'];
+
+        function fmt(n) { return n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed(1)+'K' : String(n); }
+        function timeAgo(ts) {
+            if (!ts) return '--';
+            const d = Date.now() - new Date(ts).getTime();
+            if (d < 60000) return 'just now';
+            if (d < 3600000) return Math.floor(d/60000) + 'm ago';
+            if (d < 86400000) return Math.floor(d/3600000) + 'h ago';
+            return Math.floor(d/86400000) + 'd ago';
+        }
+        function statusPill(status) {
+            const s = (status || '').toLowerCase();
+            if (['healthy','synced','success','completed','running'].includes(s)) return `<span class="pill pill-success">${status}</span>`;
+            if (['failed','error','degraded'].includes(s)) return `<span class="pill pill-error">${status}</span>`;
+            if (['pending','progressing','waiting','building'].includes(s)) return `<span class="pill pill-warn">${status}</span>`;
+            return `<span class="pill pill-neutral">${status || 'unknown'}</span>`;
+        }
+
+        async function get(url) {
+            try { const r = await fetch(url); return r.ok ? await r.json() : null; }
+            catch { return null; }
+        }
+
+        async function loadSummary() {
+            const s = await get(`${BASE}/telemetry/summary?days=1`);
+            if (s) {
+                document.getElementById('messages-today').textContent = s.messages || 0;
+                const t = (s.tokens_in||0) + (s.tokens_out||0);
+                document.getElementById('tokens-today').textContent = fmt(t);
+                document.getElementById('tokens-sub').textContent = `In: ${fmt(s.tokens_in||0)} / Out: ${fmt(s.tokens_out||0)}`;
+                document.getElementById('cost-today').textContent = '$' + (s.cost_estimate||0).toFixed(2);
+                document.getElementById('active-sessions').textContent = s.sessions || 0;
+            } else {
+                document.getElementById('messages-today').textContent = '0';
+                document.getElementById('tokens-today').textContent = '0';
+                document.getElementById('tokens-sub').textContent = 'No telemetry data';
+                document.getElementById('cost-today').textContent = '$0.00';
+                document.getElementById('active-sessions').textContent = '0';
+            }
+        }
+
+        async function loadAgents() {
+            const agents = await get(`${BASE}/telemetry/agents?days=1`);
+            const sessEl = document.getElementById('sessions-section');
+            const chartEl = document.getElementById('agent-chart');
+
+            if (!agents || !agents.length) {
+                sessEl.innerHTML = '<div class="empty">No active sessions</div>';
+                chartEl.innerHTML = '<div class="empty">No agent data</div>';
+                document.getElementById('active-agents-sub').textContent = 'no agents active';
+                return;
+            }
+
+            // Active sessions table
+            const activeAgents = agents.filter(a => a.messages > 0);
+            document.getElementById('active-agents-sub').textContent = activeAgents.length + ' agent' + (activeAgents.length !== 1 ? 's' : '') + ' active';
+            let sessHtml = '<table><thead><tr><th>Agent</th><th>Messages</th><th>Tokens</th></tr></thead><tbody>';
+            activeAgents.forEach(a => {
+                sessHtml += `<tr><td><span class="status-dot dot-green"></span>${a.agent}</td><td>${a.messages}</td><td>${fmt(a.tokens||0)}</td></tr>`;
+            });
+            sessHtml += '</tbody></table>';
+            sessEl.innerHTML = activeAgents.length ? sessHtml : '<div class="empty">No active sessions</div>';
+
+            // Bar chart
+            const mx = Math.max(...agents.map(a => a.messages), 1);
+            let chartHtml = '';
+            agents.forEach((a, i) => {
+                const pct = Math.round(a.messages / mx * 100);
+                const color = AGENT_COLORS[i % AGENT_COLORS.length];
+                chartHtml += `<div class="chart-bar-row">
+                    <div class="chart-bar-label">${a.agent}</div>
+                    <div class="chart-bar-track"><div class="chart-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+                    <div class="chart-bar-value">${a.messages}</div>
+                </div>`;
+            });
+            chartEl.innerHTML = chartHtml;
+        }
+
+        async function loadTokenBurn() {
+            const el = document.getElementById('token-burn');
+            const daily = await get(`${BASE}/telemetry/summary?days=1`);
+            const weekly = await get(`${BASE}/telemetry/summary?days=7`);
+            if (!daily && !weekly) { el.innerHTML = '<div class="empty">No token data</div>'; return; }
+            const dTokens = daily ? (daily.tokens_in||0) + (daily.tokens_out||0) : 0;
+            const wTokens = weekly ? (weekly.tokens_in||0) + (weekly.tokens_out||0) : 0;
+            const dCost = daily ? (daily.cost_estimate||0) : 0;
+            const wCost = weekly ? (weekly.cost_estimate||0) : 0;
+            const mx = Math.max(dTokens, wTokens, 1);
+            el.innerHTML = `
+                <div class="chart-bar-row">
+                    <div class="chart-bar-label">Today</div>
+                    <div class="chart-bar-track"><div class="chart-bar-fill bar-green" style="width:${Math.round(dTokens/mx*100)}%"></div></div>
+                    <div class="chart-bar-value">${fmt(dTokens)} / $${dCost.toFixed(2)}</div>
+                </div>
+                <div class="chart-bar-row">
+                    <div class="chart-bar-label">7 Days</div>
+                    <div class="chart-bar-track"><div class="chart-bar-fill bar-purple" style="width:${Math.round(wTokens/mx*100)}%"></div></div>
+                    <div class="chart-bar-value">${fmt(wTokens)} / $${wCost.toFixed(2)}</div>
+                </div>`;
+        }
+
+        async function loadPipelines() {
+            const el = document.getElementById('pipeline-section');
+            const countEl = document.getElementById('pipelines-count');
+            const data = await get(`${BASE}/pipeline/list`);
+            if (!data || !data.pipelines || !data.pipelines.length) {
+                el.innerHTML = '<div class="empty">No active pipelines</div>';
+                countEl.textContent = '0';
+                return;
+            }
+            const pipes = data.pipelines;
+            countEl.textContent = pipes.length;
+            let html = '<table><thead><tr><th>ID</th><th>Branch</th><th>Step</th><th>Status</th></tr></thead><tbody>';
+            pipes.forEach(p => {
+                html += `<tr><td style="font-size:0.75rem">${(p.id||'').substring(0,8)}</td><td>${p.branch||'--'}</td><td>${p.current_step||'--'}</td><td>${statusPill(p.status)}</td></tr>`;
+            });
+            html += '</tbody></table>';
+            el.innerHTML = html;
+        }
+
+        async function loadDeploy() {
+            const el = document.getElementById('deploy-section');
+            const data = await get(`${BASE}/argocd/status`);
+            if (!data || data.detail) {
+                el.innerHTML = '<div class="empty">ArgoCD not configured or unreachable</div>';
+                return;
+            }
+            const status = data.health_status || data.status || '--';
+            const sync = data.sync_status || '--';
+            el.innerHTML = `<table><thead><tr><th>App</th><th>Health</th><th>Sync</th></tr></thead><tbody>
+                <tr><td>${data.app_name || '--'}</td><td>${statusPill(status)}</td><td>${statusPill(sync)}</td></tr>
+            </tbody></table>`;
+        }
+
+        async function loadBuild() {
+            const el = document.getElementById('build-section');
+            const data = await get(`${BASE}/jenkins/status`);
+            if (!data || data.detail) {
+                el.innerHTML = '<div class="empty">Jenkins not configured or unreachable</div>';
+                return;
+            }
+            const status = data.result || data.status || 'unknown';
+            const num = data.build_number || data.number || '--';
+            el.innerHTML = `<table><thead><tr><th>Build</th><th>Status</th><th>Version</th></tr></thead><tbody>
+                <tr><td>#${num}</td><td>${statusPill(status)}</td><td>${data.version || '--'}</td></tr>
+            </tbody></table>`;
+        }
+
+        async function startPipeline() {
+            const branch = prompt('Branch name (leave empty for current):') || '';
+            const r = await fetch(`${BASE}/pipeline/start`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({branch}) });
+            const d = await r.json();
+            alert(r.ok ? 'Pipeline started: ' + (d.pipeline_id || d.id || 'OK') : 'Error: ' + (d.detail || 'Failed'));
+            loadAll();
+        }
+        async function runTests() {
+            const r = await fetch(`${BASE}/testing/run`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({}) });
+            const d = await r.json();
+            alert(r.ok ? 'Tests started' : 'Error: ' + (d.detail || 'Failed'));
+        }
+        async function codeReview() {
+            const base = prompt('Base branch:', 'main') || 'main';
+            const head = prompt('Head branch:', 'HEAD') || 'HEAD';
+            window.open(`${BASE}/ui#review-${base}-${head}`, '_blank');
+        }
+
+        function loadAll() {
+            loadSummary();
+            loadAgents();
+            loadTokenBurn();
+            loadPipelines();
+            loadDeploy();
+            loadBuild();
+            document.getElementById('refresh-info').textContent = 'Last refresh: ' + new Date().toLocaleTimeString() + ' (auto: 30s)';
+        }
+
+        loadAll();
+        setInterval(loadAll, 30000);
+    </script>
+</body>
+</html>

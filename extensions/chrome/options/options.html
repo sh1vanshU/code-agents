@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Code Agents — Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Code Agents Settings</h1>
+
+    <div class="field">
+      <label for="server-url">Server URL</label>
+      <input type="url" id="server-url" placeholder="http://localhost:8000">
+    </div>
+
+    <div class="field">
+      <label for="default-agent">Default Agent</label>
+      <select id="default-agent"></select>
+    </div>
+
+    <div class="field">
+      <label for="theme-toggle">Theme</label>
+      <select id="theme-toggle">
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+      </select>
+    </div>
+
+    <div class="actions">
+      <button id="btn-save" class="btn-primary">Save Settings</button>
+      <span id="save-status" class="save-status"></span>
+    </div>
+  </div>
+
+  <script src="../shared/agents.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

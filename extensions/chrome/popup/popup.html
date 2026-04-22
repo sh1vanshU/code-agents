@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Code Agents</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup">
+    <header>
+      <span class="logo">CA</span>
+      <span class="title">Code Agents</span>
+    </header>
+
+    <div class="status-row">
+      <span>Server</span>
+      <span id="status-label" class="status-label disconnected">Disconnected</span>
+    </div>
+
+    <div class="field">
+      <label for="agent-select">Agent</label>
+      <select id="agent-select"></select>
+    </div>
+
+    <div class="actions">
+      <button id="btn-open-panel" class="btn-primary">Open Side Panel</button>
+      <a id="link-settings" href="#">Settings</a>
+    </div>
+  </div>
+
+  <script src="../shared/agents.js"></script>
+  <script src="../shared/api.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

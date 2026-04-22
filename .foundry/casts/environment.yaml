@@ -1,0 +1,6 @@
+# Environment quality gates — loaded by audit_orchestrator.load_gates()
+gates:
+  - name: "Env vars documented"
+    check: "_gate_env_documented"
+    severity: "info"
+    description: "All env vars used in code appear in .env.example"

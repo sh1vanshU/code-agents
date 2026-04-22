@@ -1,0 +1,14 @@
+---
+description: Do not run pytest with coverage unless the user explicitly asks
+alwaysApply: true
+---
+
+## Testing — no coverage by default
+
+- **Do not** run tests with **`--cov`**, **`pytest-cov`**, **`coverage run`**, **`coverage html`**, or any command that generates **`htmlcov/`** or **`.coverage*`** data — unless the user **explicitly** asks for coverage.
+- **Prefer** narrow, fast checks, for example:
+  - `poetry run pytest path/to/test_file.py -q`
+  - `poetry run pytest tests/test_foo.py::TestClass::test_name -q`
+- When verifying changes, use **small subsets** of tests; avoid **`poetry run pytest`** over the **entire** suite unless requested (this repo has thousands of tests).
+
+If the user wants coverage, they will say so (e.g. “run with coverage”, “--cov”). Otherwise assume **no coverage**.

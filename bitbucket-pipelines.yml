@@ -1,0 +1,63 @@
+# Code Agents — Bitbucket Pipelines CI
+# Runs on every push and PR to main
+
+image: python:3.12
+
+definitions:
+  caches:
+    poetry: ~/.cache/pypoetry
+    npm: extensions/vscode/node_modules
+
+pipelines:
+  default:
+    - step:
+        name: Lint & Test (Python)
+        caches:
+          - pip
+          - poetry
+        script:
+          - pip install poetry
+          - poetry install --no-interaction
+          - poetry run pytest --tb=short -q
+        artifacts:
+          - test-results/**
+
+    - step:
+        name: Lint & Test (VS Code Extension)
+        caches:
+          - npm
+        script:
+          - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+          - apt-get install -y nodejs
+          - cd extensions/vscode
+          - npm install
+          - cd webview-ui && npm install && npm test && cd ..
+          - npm run lint
+          - npm run compile
+
+  pull-requests:
+    '**':
+      - step:
+          name: PR Validation
+          caches:
+            - pip
+            - poetry
+          script:
+            - pip install poetry
+            - poetry install --no-interaction
+            - poetry run pytest --tb=short -q
+            - cd extensions/vscode/webview-ui && npm install && npm test
+
+  branches:
+    main:
+      - step:
+          name: Full Test Suite
+          caches:
+            - pip
+            - poetry
+          script:
+            - pip install poetry
+            - poetry install --no-interaction
+            - poetry run pytest --tb=short -q
+          after-script:
+            - echo "Tests passed on main branch"

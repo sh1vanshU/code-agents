@@ -1,0 +1,21 @@
+# Security quality gates — loaded by audit_orchestrator.load_gates()
+gates:
+  - name: "No secrets in source"
+    check: "_gate_no_secrets"
+    severity: "critical"
+    description: "Detect hardcoded secrets, API keys, and credentials in source code"
+
+  - name: "No SQL concatenation"
+    check: "_gate_no_sql_concat"
+    severity: "critical"
+    description: "Prevent SQL injection via string concatenation"
+
+  - name: "No eval/exec from user input"
+    check: "_gate_no_eval"
+    severity: "critical"
+    description: "Block dynamic code execution from untrusted input"
+
+  - name: "Security headers configured"
+    check: "_gate_security_headers"
+    severity: "warning"
+    description: "Ensure CSP, HSTS, X-Frame-Options headers are set"
